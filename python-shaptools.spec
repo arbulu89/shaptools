@@ -14,8 +14,6 @@
 
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 
-
-%{?!python_module:%define python_module() python-%{**} python3-%{**}}
 Name:           python-shaptools
 Version:        0.1.0
 Release:        0
@@ -24,6 +22,11 @@ Summary:        Python tools to interact with SAP HANA utilities
 Url:            https://github.com/SUSE/shaptools
 Group:          Development/Languages/Python
 Source:         shaptools-%{version}.tar.gz
+
+# Beyond SLE12SP3 and Last OpenSuse versions
+%if 0%{?sle_version} >= 120300 && !0%{?is_opensuse}
+
+%{?!python_module:%define python_module() python-%{**} python3-%{**}}
 BuildRequires:  python-rpm-macros
 BuildRequires:  %{python_module devel}
 BuildRequires:  %{python_module setuptools}
@@ -48,7 +51,7 @@ API to expose SAP HANA functionalities
 
 %files %{python_files}
 %doc CHANGELOG.md README.md
-# %license macro is not availabe on older releases
+# %license macro is not available on older releases
 %if 0%{?sle_version} <= 120300
 %doc LICENSE
 %else
@@ -57,3 +60,42 @@ API to expose SAP HANA functionalities
 %{python_sitelib}/*
 
 %changelog
+
+%else
+
+BuildRequires:  python-devel
+BuildRequires:  python-setuptools
+BuildRequires:  unzip
+BuildRequires:  fdupes
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+
+%if 0%{?suse_version} && 0%{?suse_version} <= 1110
+%{!?python_sitelib: %global python_sitelib %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%else
+BuildArch:      noarch
+%endif
+
+%description
+API to expose SAP HANA functionalities
+
+%prep
+%setup -q -n shaptools-%{version}
+
+%build
+CFLAGS="%{optflags}" python setup.py build
+
+%install
+python setup.py install --prefix=%{_prefix} --root=%{buildroot}
+%fdupes %{buildroot}
+
+%files
+%defattr(-,root,root)
+%doc CHANGELOG.md README.md LICENSE
+
+%exclude %{python_sitelib}/shaptools/tests/
+%{python_sitelib}/shaptools/
+%{python_sitelib}/shaptools-%{version}-py%{py_ver}.egg-info
+
+%changelog
+
+%endif
