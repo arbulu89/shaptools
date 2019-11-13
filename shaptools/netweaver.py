@@ -234,7 +234,7 @@ class NetweaverInstance(object):
 
         cmd = '{software_path}/sapinst SAPINST_USE_HOSTNAME={virtual_host} '\
             'SAPINST_EXECUTE_PRODUCT_ID={product_id} '\
-            'SAPINST_SKIP_SUCCESSFULLY_FINISHED_DIALOG=true SAPINST_START_GUISERVER=false '\
+            'SAPINST_SKIP_SUCCESSFULLY_FINISHED_DIALOG=true SAPINST_START_GUISERVER=false SAPINST_ACCEPT_INTERNAL_SIGNATURE=1 '\
             'SAPINST_INPUT_PARAMETERS_URL={conf_file}{cwd}'.format(
                 software_path=software_path,
                 virtual_host=virtual_host,

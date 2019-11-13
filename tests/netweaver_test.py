@@ -279,7 +279,7 @@ class TestNetweaver(unittest.TestCase):
             '/tmp/copy.inifile.params', sid='HA1',
             sidadmPassword='testpwd', masterPwd='Suse1234')
         self.assertTrue(filecmp.cmp(pwd+'/support/modified.inifile.params', conf_file))
-        
+
         #case when new entry is added to config file
         shutil.copyfile(pwd+'/support/original.inifile.params', '/tmp/copy.inifile.params')
         conf_file = netweaver.NetweaverInstance.update_conf_file(
@@ -325,7 +325,7 @@ class TestNetweaver(unittest.TestCase):
         self._netweaver.install('/path', 'virtual', 'MYPRODUCT', '/inifile.params', 'root', 'pass')
         cmd = '/path/sapinst SAPINST_USE_HOSTNAME=virtual '\
             'SAPINST_EXECUTE_PRODUCT_ID=MYPRODUCT '\
-            'SAPINST_SKIP_SUCCESSFULLY_FINISHED_DIALOG=true SAPINST_START_GUISERVER=false '\
+            'SAPINST_SKIP_SUCCESSFULLY_FINISHED_DIALOG=true SAPINST_START_GUISERVER=false SAPINST_ACCEPT_INTERNAL_SIGNATURE=1 '\
             'SAPINST_INPUT_PARAMETERS_URL=/inifile.params'
         mock_execute_cmd.assert_called_once_with(cmd, 'root', 'pass', None)
 
@@ -340,7 +340,7 @@ class TestNetweaver(unittest.TestCase):
             '/path', 'virtual', 'MYPRODUCT', '/inifile.params', 'root', 'pass', cwd='/tmp')
         cmd = '/path/sapinst SAPINST_USE_HOSTNAME=virtual '\
             'SAPINST_EXECUTE_PRODUCT_ID=MYPRODUCT '\
-            'SAPINST_SKIP_SUCCESSFULLY_FINISHED_DIALOG=true SAPINST_START_GUISERVER=false '\
+            'SAPINST_SKIP_SUCCESSFULLY_FINISHED_DIALOG=true SAPINST_START_GUISERVER=false SAPINST_ACCEPT_INTERNAL_SIGNATURE=1 '\
             'SAPINST_INPUT_PARAMETERS_URL=/inifile.params SAPINST_CWD=/tmp'
         mock_remove_old_files.assert_called_once_with('/tmp', 'root', 'pass', None)
         mock_execute_cmd.assert_called_once_with(cmd, 'root', 'pass', None)
@@ -358,7 +358,7 @@ class TestNetweaver(unittest.TestCase):
 
         cmd = '/path/sapinst SAPINST_USE_HOSTNAME=virtual '\
             'SAPINST_EXECUTE_PRODUCT_ID=MYPRODUCT '\
-            'SAPINST_SKIP_SUCCESSFULLY_FINISHED_DIALOG=true SAPINST_START_GUISERVER=false '\
+            'SAPINST_SKIP_SUCCESSFULLY_FINISHED_DIALOG=true SAPINST_START_GUISERVER=false SAPINST_ACCEPT_INTERNAL_SIGNATURE=1 '\
             'SAPINST_INPUT_PARAMETERS_URL=/inifile.params'
         mock_execute_cmd.assert_called_once_with(cmd, 'root', 'pass', 'remote')
         self.assertTrue('SAP Netweaver installation failed' in str(err.exception))
