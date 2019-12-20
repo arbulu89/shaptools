@@ -60,9 +60,11 @@ class CalInstance(object):
         proc.stdin.write('{}\n'.format(root_password).encode())
         proc.stdin.flush()
         for line in iter(proc.stdout.readline, b''):
-            logger.info(line)
+            logger.debug(line)
             if 'Hit enter to continue otherwise use' in str(line):
                 return True
+            elif 'Do you agree to the above license terms' in str(line):
+                break
         return False
 
 
